@@ -1,11 +1,12 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { ENGINE_TUNING } from '../../redux/constants/ExpTypeConstants'
 import DataAdder from './DataAdder'
 
-const EngineTuning = () => {
+const EngineTuning = ({navigation}) => {
     return (
         <View>
-            <DataAdder />
+            <DataAdder expType={ENGINE_TUNING} navigation={navigation}/>
         </View>
     )
 }

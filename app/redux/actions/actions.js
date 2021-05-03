@@ -1,11 +1,12 @@
-import firebase from 'firebase';
+import firestore from '@react-native-firebase/firestore'
+import auth from '@react-native-firebase/auth'
 import { USER_POSTS_STATE_CHANGE, USER_STATE_CHANGE } from '../constants/constants';
 
-export const fetchUser = () => {
+export const fetchUser = (props) => {
     return (dispatch) => {
-        firebase.firestore()
+        firestore()
             .collection("users")
-            .doc(firebase.auth().currentUser.uid)
+            .doc(auth().currentUser.uid)
             .get()
             .then((snapshot) => {
                 if (snapshot.exists) {
@@ -13,6 +14,7 @@ export const fetchUser = () => {
                         type: USER_STATE_CHANGE,
                         payload: { currentUser: snapshot.data() }
                     });
+                    // console.log("user Data", snapshot.data());
                 } else {
                     console.log("user does not exist");
                 }
@@ -46,3 +48,21 @@ export const fetchUser = () => {
 //             })
 //     })
 // }
+
+export const addCarExpanses = async (data, navigation) => {
+    console.log("addCarExpanses called: ");
+    firestore()
+        .collection("CarExpanses")
+        .doc(auth().currentUser.uid)
+        .collection(data.expType)
+        .add({
+            ...data,
+            creationData: firestore.FieldValue.serverTimestamp()
+        })
+        .then((res) => {
+            console.log("data added",);
+            navigation.navigate('Main');
+        })
+        .catch((error) => console.log(error));
+}
+

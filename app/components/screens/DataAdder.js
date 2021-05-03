@@ -9,22 +9,38 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import ImagePicker from 'react-native-image-crop-picker';
 
 import Colors from '../constants/Colors';
+import { addCarExpanses } from '../../redux/actions/actions';
 
-const DataAdder = (props) => {
-    const { } = props;
+const DataAdder = ({expType, navigation}) => {
+    // const { expType, navigation } = props;
+
+    console.log(expType);
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     
-    const [fuelID, setFuelID] = useState(1);
+    const [ID, setFuelID] = useState(1);
     // get from redux from user profile
     const [carNumberPlate, setcarNumberPlate] = useState('default');
     const [date, setDate] = useState('Apr 25 2021');
-    const [fuelCost, setfuelCost] = useState(0);
+    const [Cost, setfuelCost] = useState(0);
     const [odoMeter, setOdoMeter] = useState(0);
     const [fuelInvoice, setFuelInvoice] = useState();
     const [image, setImage] = useState();
     console.log("image from hooks: ", image);
     const refRBSheet = useRef();
+
+    const addHandler = () => {
+       const data = {
+            expType: expType,
+            ID: ID,
+            slipDate: date,
+            cost: Cost,
+            odoMeter: odoMeter,
+            image: image
+        }
+        navigation.navigate('Main')
+        const result = addCarExpanses(data, navigation)
+     };
 
     // ================= cam and RBSheet ===========
     const options = [
@@ -37,7 +53,7 @@ const DataAdder = (props) => {
                     height: 400,
                     cropping: true,
                 }).then(image => {
-                    // setImage(image) call props
+                    setImage(image) // call props
                     console.log(image); 
                 }).catch((error) => console.log("error from openCamera: ", error)).finally(() => {
                     refRBSheet.current.close();
@@ -54,7 +70,7 @@ const DataAdder = (props) => {
                     cropping: true,
                     freeStyleCropEnabled: true,
                 }).then((image) => {
-                    // setImage(image) call props
+                    setImage(image) //call props
                     console.log(image);
                 }).catch((error) => console.log("error from openCamera: ", error)).finally(() => {
                     refRBSheet.current.close();
@@ -134,15 +150,19 @@ const DataAdder = (props) => {
                     <Text style={styles.heading}>Add Slip</Text>
                 </TouchableOpacity>
             </View>
-            <View>
-                {/* <Image source={imageVar} /> */}
-                {image && <Image source={{uri: `data:${image.mime};base64,${image.data}`}} />}
-                {/* {image &&} */}
+            <View style={styles.containerImage}>
+                {/* <Image style={styles.image} source={{ uri: image.downloadURL }} /> */}
+                {/* <Image source={{ uri: `data:${image.mime};base64,${image.data}` }} /> */}
+                {image && <Image style={styles.image} source={{ uri: `data:${image.mime};base64,${image.data}` }} />}
             </View>
+            {/* <View>
+                {image && <Image source={{uri: `data:${image.mime};base64,${image.data}`}} />}  
+            </View> */}
             <View
                 style={styles.btn}
             >
                 <Button
+                    onPress={addHandler}
                     title='Add'
                     color= {Colors.btnColor}
                 />
@@ -219,4 +239,12 @@ const styles = StyleSheet.create({
         fontSize: 17,
         paddingLeft: 17,
     },
+    containerImage: {
+        flex: 1,
+        margin: 10
+    },
+    image: {
+        flex: 1,
+        aspectRatio: 1 / 1
+    }
 })

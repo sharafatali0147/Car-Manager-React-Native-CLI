@@ -1,11 +1,12 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { SERVICE } from '../../redux/constants/ExpTypeConstants'
 import DataAdder from './DataAdder'
 
-const Service = () => {
+const Service = ({navigation}) => {
     return (
         <View>
-            <DataAdder />
+            <DataAdder expType={SERVICE} navigation={navigation} />
         </View>
     )
 }

@@ -117,7 +117,7 @@ const App = (props) => {
           <Stack.Screen
             name="Main"
             component={MainScreen}
-            options={{ headerShown: true, title: 'Car Manager',  }}
+            options={{ headerShown: true, title: 'Car Exp Manager App',  }}
           />
           <Stack.Screen
             name="Fuel"
@@ -173,7 +173,18 @@ const App = (props) => {
 };
 
 const styles = StyleSheet.create({
-  
+  container: {
+    flex: 1,
+    backgroundColor: '#008080',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  card: {
+    padding: 20,
+    marginHorizontal: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 export default App;

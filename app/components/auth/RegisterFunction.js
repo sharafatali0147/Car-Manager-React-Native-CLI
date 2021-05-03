@@ -19,7 +19,8 @@ const RegisterFunction = ({navigation}) => {
 
                 firestore()
                     .collection("users")
-                    .doc(auth().currentUser.uid).set({
+                    .doc(auth().currentUser.uid)
+                    .set({
                         name,
                         email,
                         password,
