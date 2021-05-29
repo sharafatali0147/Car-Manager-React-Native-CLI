@@ -8,22 +8,23 @@ import Colors from '../constants/Colors';
 import auth from '@react-native-firebase/auth';
 
 const Profile = () => {
-  const currentUser = useSelector(state => state.userState.currentUser)
+  const currentUser = useSelector(state => state.userState.currentUser);
+  const { name, email, carNumberPlate, password } = currentUser;
 
     return (
       <View style={styles.containerGallery}>
         <View style={styles.container}>
           <Card style={styles.mainCard}>
-            <Text style={styles.fontStyle}>Name: { currentUser.name }</Text>
+            <Text style={styles.fontStyle}>Name: {name && name }</Text>
           </Card>
           <Card style={styles.mainCard}>
-            <Text style={styles.fontStyle}>Email: { currentUser.email }</Text>
+            <Text style={styles.fontStyle}>Email: {email && email }</Text>
           </Card>
             {/* <Card style={styles.mainCard}>
-              <Text>Password: { currentUser.password }</Text>
+              <Text>Password: {password && password }</Text>
             </Card> */}
           <Card style={styles.mainCard}>
-              <Text style={styles.fontStyle}>Car Number: { currentUser.carNumberPlate }</Text>
+              <Text style={styles.fontStyle}>Car Number: { carNumberPlate && carNumberPlate }</Text>
           </Card>
           <TouchableOpacity
             onPress={() => auth().signOut()}

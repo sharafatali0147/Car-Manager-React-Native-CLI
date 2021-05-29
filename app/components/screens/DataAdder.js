@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { StyleSheet, Text, View, Button, TextInput, Pressable, TouchableOpacity, Image} from 'react-native'
+import { StyleSheet, Text, View, TextInput, ActivityIndicator, TouchableOpacity} from 'react-native'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -7,6 +7,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Entypo  from 'react-native-vector-icons/Entypo'; 
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImagePicker from 'react-native-image-crop-picker';
+import { Image, Button } from 'react-native-elements'
 
 import Colors from '../constants/Colors';
 import { addCarExpanses } from '../../redux/actions/actions';
@@ -18,6 +19,7 @@ const DataAdder = ({expType, navigation}) => {
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     
+    const [btnLoading, setBtnLoading] = useState(false);
     const [ID, setFuelID] = useState(1);
     // get from redux from user profile
     const [carNumberPlate, setcarNumberPlate] = useState('default');
@@ -38,8 +40,8 @@ const DataAdder = ({expType, navigation}) => {
             odoMeter: odoMeter,
             image: image
         }
-        navigation.navigate('Main')
-        const result = addCarExpanses(data, navigation)
+        
+        addCarExpanses(data, navigation)
      };
 
     // ================= cam and RBSheet ===========
@@ -53,7 +55,7 @@ const DataAdder = ({expType, navigation}) => {
                     height: 400,
                     cropping: true,
                 }).then(image => {
-                    setImage(image) // call props
+                    setImage(image.path) // call props
                     console.log(image); 
                 }).catch((error) => console.log("error from openCamera: ", error)).finally(() => {
                     refRBSheet.current.close();
@@ -70,7 +72,7 @@ const DataAdder = ({expType, navigation}) => {
                     cropping: true,
                     freeStyleCropEnabled: true,
                 }).then((image) => {
-                    setImage(image) //call props
+                    setImage(image.path) //call props
                     console.log(image);
                 }).catch((error) => console.log("error from openCamera: ", error)).finally(() => {
                     refRBSheet.current.close();
@@ -122,7 +124,7 @@ const DataAdder = ({expType, navigation}) => {
                
             </View>
             <View style={styles.subContainer}>
-                <FontAwesome5 name='money-bill' size={Colors.iconeSize} color={Colors.btnColor} />
+                <MaterialCommunityIcons name='cash-plus' size={Colors.iconeSize} color={Colors.btnColor} />
                 <View style={styles.childContainer}>
                     <Text style={styles.heading}>Total cost: </Text>
                     <TextInput
@@ -149,21 +151,21 @@ const DataAdder = ({expType, navigation}) => {
                 >
                     <Text style={styles.heading}>Add Slip</Text>
                 </TouchableOpacity>
+                {image &&
+                    <Image
+                        source={{ uri: image }}
+                        style={{width: 150, height: 150}}
+                        PlaceholderContent={<ActivityIndicator />}
+                    />
+                }
             </View>
-            <View style={styles.containerImage}>
-                {/* <Image style={styles.image} source={{ uri: image.downloadURL }} /> */}
-                {/* <Image source={{ uri: `data:${image.mime};base64,${image.data}` }} /> */}
-                {image && <Image style={styles.image} source={{ uri: `data:${image.mime};base64,${image.data}` }} />}
-            </View>
-            {/* <View>
-                {image && <Image source={{uri: `data:${image.mime};base64,${image.data}`}} />}  
-            </View> */}
             <View
                 style={styles.btn}
             >
                 <Button
                     onPress={addHandler}
                     title='Add'
+                    // loading
                     color= {Colors.btnColor}
                 />
             </View>
